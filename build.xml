@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="EventCentral" basedir="." default="build">
+	<description>Ant build file for EventCentral</description>
+	<property environment="env" />
+	
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="java.lib.dir" value="${env.JAVA_HOME}/lib" />
+    <property name="build.dir" value="${basedir}/build" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="web.dir" location="${basedir}/web" />
+	
+	<property name="dist.dir" location="dist" />
+	<property name="dist.lib" location="${dist.dir}/lib" />
+	<property name="dist.jar" value="${dist.dir}/lsecs.jar" />
+	<property name="dist.war" value="${dist.dir}/lsecc.war" />
+	
+	<property name="javac.debuglevel" value="lines,vars,source" />
+	<property name="javac.optimize" value="false" />
+	<property name="javac.debug" value="on" />
+	<property name="javac.deprecation" value="false" />
+	<!--property name="javac.source" value="1.7" /-->
+	<!--property name="javac.target" value="1.7" /-->
+	
+	<!-- jar manifest variables -->
+	<property name="jar.manifest.title" value="Event Central Server" />
+	<property name="jar.manifest.version" value="1.0.0" />
+	<property name="jar.manifest.vendor" value="Li Xiang" />
+	<property name="jar.manifest.mainclass" value="org.littlestar.event_central.Server" />
+	
+	<!-- war manifest variables -->
+	<property name="war.manifest.title" value="Event Central Client" />
+	<property name="war.manifest.version" value="1.0.0" />
+	<property name="war.manifest.vendor" value="Li Xiang" />
+	
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${java.lib.dir}">
+			<include name="tools.jar" />
+		</fileset>
+	</path>
+
+	<target name="clean" description="removes generated files">
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+		<!-- delete file=... /-->
+		<!--delete>
+			<fileset dir="${build.dir}" includes="**/*" />
+			<fileset dir="${dist.dir}" />
+		</delete-->
+	</target>
+	
+	<target name="init" depends="clean"> 
+	    <mkdir dir="${build.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.lib}" />
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac debug="${javac.debug}" 
+			   debuglevel="${javac.debuglevel}" 
+			   includeantruntime="false" 
+			   destdir="${build.dir}" 
+			   srcdir="${src.dir}" 
+			   optimize="${javac.optimize}" 
+			   deprecation="${javac.deprecation}" 
+			   encoding="UTF-8">
+			<classpath refid="compile.classpath" />
+			<!--compilerarg value="-Xlint:unchecked" /-->
+			<!--compilerarg value="-Xlint:deprecation" /-->
+		</javac>
+	</target>
+
+	<target name="build" depends="compile" description="Generate the jar file.">
+	<jar destfile="${dist.jar}">
+		<fileset dir="${build.dir}"
+			excludes="org/littlestar/event_central/webui/**" />
+		<manifest>
+			<attribute name="Main-Class" value="${manifest.mainclass}" />
+			<attribute name="Specification-Title"
+				value="${manifest.title}" />
+			<attribute name="Specification-Version"
+				value="${manifest.version}" />
+			<attribute name="Specification-Vendor"
+				value="${manifest.vendor}" />
+		</manifest>
+	</jar>
+
+	<war destfile="${dist.war}" webxml="${web.dir}/WEB-INF/web.xml">
+		<fileset dir="${web.dir}">
+			<include name="**/*.*" />
+		</fileset>
+		<classes dir="${build.dir}"
+			excludes="org/littlestar/event_central/Launcher.*,org/littlestar/event_central/listener/*.*,org/littlestar/event_central/observer/*.*,org/littlestar/event_central/test/*.*" />
+		<lib dir="${lib.dir}" excludes="snmp4j*,syslog4j*" />
+		<manifest>
+			<attribute name="Specification-Title"
+				value="${war.manifest.title}" />
+			<attribute name="Specification-Version"
+				value="${war.manifest.version}" />
+			<attribute name="Specification-Vendor"
+				value="${war.manifest.vendor}" />
+		</manifest>
+	</war>
+
+	<!-- 拷贝配置/执行脚本到发布目录 -->
+	<copy todir="${dist.lib}">
+		<fileset dir="${basedir}/lib" />
+	</copy>
+	<copy todir="${dist.dir}">
+		<fileset dir="${basedir}"
+			includes="README*,LICENSE*,datasource*,lsecs*,lsect*" />
+	</copy>
+</target>
+</project>

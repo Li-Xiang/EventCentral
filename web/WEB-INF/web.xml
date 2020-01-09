@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+  version="4.0"
+  metadata-complete="true">
+  <display-name>Little-star Events Client</display-name>
+  <description>事件监控客户端</description>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <context-param>
+	<param-name>ds_config</param-name>
+	<param-value>D:\product\lsec\datasource.xml</param-value>
+  </context-param>
+  <request-character-encoding>UTF-8</request-character-encoding>
+  <servlet>
+    <servlet-name>QueryEventsServlet</servlet-name>
+    <servlet-class>org.littlestar.event_central.webui.QueryEventsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>CloseEventServlet</servlet-name>
+    <servlet-class>org.littlestar.event_central.webui.CloseEventServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>QueryListenersServlet</servlet-name>
+    <servlet-class>org.littlestar.event_central.webui.QueryListenersServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QueryEventsServlet</servlet-name>
+    <url-pattern>/QueryEvents</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CloseEventServlet</servlet-name>
+    <url-pattern>/CloseEvent</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>QueryListenersServlet</servlet-name>
+    <url-pattern>/QueryListeners</url-pattern>
+  </servlet-mapping>
+</web-app>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<Configuration>
+	<DataSource>
+		<Driver>com.mysql.cj.jdbc.Driver</Driver>
+		<Url>jdbc:mysql://127.0.0.1/lsec</Url>
+		<User>lsec</User>
+		<Password>Passw0rd</Password>
+		<Properties>useSSL=false;useUnicode=true;characterEncoding=UTF-8;autoReconnect=true</Properties>
+	</DataSource>
+</Configuration>
